@@ -1,0 +1,11 @@
+[package]
+name = "sdu-typst-touying"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Dregen_Yor"]
+license = "MIT"
+description = "An templete based on touying, "
+keywords = ["presentation", "slides", "lecture", "sdu"  ]
+categories = ["presentation"]
+repository = "https://github.com/touying-typ/touying"
+compiler = "0.12.0"
