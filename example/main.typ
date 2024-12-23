@@ -320,38 +320,38 @@ showybox(
 #tip(title: "Best tip ever")[Check out this cool package]
 ```
 ][
-//   #align(center,{
-// info[ This is the info clue ... ]
-// tip(title: "Best tip ever")[Check out this cool package]
-//   })
+  #align(center,{
+info[ This is the info clue ... ]
+tip(title: "Best tip ever")[Check out this cool package]
+  })
 ]
 
 == 类obsidian
 
-// #info[This is information]
+#info[This is information]
 
-// #success[I'm making a note here: huge success]
+#success[I'm making a note here: huge success]
 
-// #check[This is checked!]
+#check[This is checked!]
 
-// #warning[First warning...]
+#warning[First warning...]
 
-// #note[My incredibly useful note]
+#note[My incredibly useful note]
 
-// #question[Question?]
+#question[Question?]
 
-// #example[An example make things interesting]
+#example[An example make things interesting]
 
-// #quote[To be or not to be]
+#quote[To be or not to be]
 
-// #callout(
-//   title: "Callout",
-//   fill: blue,
-//   title-color: white,
-//   body-color: black,
-//   icon: none)[123]
+#callout(
+  title: "Callout",
+  fill: blue,
+  title-color: white,
+  body-color: black,
+  icon: none)[123]
 
-// #let mycallout = callout.with(title: "My callout")//TODO:放到config中去
+#let mycallout = callout.with(title: "My callout")//TODO:放到config中去
 
 // #mycallout[Hey this is my custom callout!]
 
@@ -387,14 +387,14 @@ showybox(
 
 == 致谢
 
-// #ending-slide[
-//   #align(center + horizon)[
-//   #set text(size: 3em, weight: "bold", s.colors.primary)
+#ending-slide[
+  #align(center + horizon)[
+  #set text(size: 3em, weight: "bold", sdu_red)
 
-//   THANKS FOR ALL
+  THANKS FOR ALL
 
-//   敬请指正！
-// ]
+  敬请指正！
+]
 ]
 
 
