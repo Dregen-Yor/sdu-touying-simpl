@@ -2,6 +2,10 @@
 
 目前处于开发阶段，当前模板较多地方未处理好，整体很依托，预计寒假期间修改并发布正式版本。
 
+效果如下：
+
+![](./example/figures/main.png)
+
 ## TODO
 
 - 修改 footer，提供 footer 自定义API

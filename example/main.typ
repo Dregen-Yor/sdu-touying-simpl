@@ -19,23 +19,9 @@
 #show heading.where(level: 1): set heading(numbering: "1.")
 #title-slide()
 
-
-//  config-info(
-  //   title: [Title],
-  //   subtitle: [子目录],
-  //   author: [Authors],
-  //   date: datetime.today(),
-  //   institution: [Institution],
-  // ),
 = 第一章：字体变
 
 == 想分列显示？
-
-// #slide[
-//   第一列
-// ][
-//   第二列
-// ]
 
 #slide(composer: (1fr,1fr, auto))[
   展示
@@ -52,22 +38,34 @@
 == 表格
 //表格内容设置在main.typ中
 
+#[
+  #set align(center+horizon)
+  #let a = table.cell(
+    fill: green.lighten(60%),
+  )[A]
+  #let b = table.cell(
+    fill: aqua.lighten(60%),
+  )[B]
 
-#let a = table.cell(
-  fill: green.lighten(60%),
-)[A]
-#let b = table.cell(
-  fill: aqua.lighten(60%),
-)[B]
 
-#table(
-  columns: 4,
-  [], [Exam 1], [Exam 2], [Exam 3],
 
-  [John], [], a, [],
-  [Mary], [], a, a,
-  [Robert], b, a, b,
-)
+  #table(
+    columns: 4,
+    [], [Exam 1], [Exam 2], [Exam 3],
+
+    [John], [], a, [],
+    [Mary], [], a, a,
+    [Robert], b, a, b,
+  )
+]
+== 数学公式
+行内公式：$a^2 + b^2 = c^2$
+
+块级公式：
+
+$ E=m c^2\ angle.l a, b angle.r &= arrow(a) dot arrow(b) \
+                       &= a_1 b_1 + a_2 b_2 + ... a_n b_n \
+                       &= sum_(i=1)^n a_i b_i.  $
 
 = 第二章：小组件
 
@@ -285,28 +283,28 @@ showybox(
 ][
   #align(center,{
 
-  // showybox(
-  // [Hello world!]
-  // )
+  showybox(
+  [Hello world!]
+  )
 
-// showybox(
-//   frame: (
-//     dash: "dashed",
-//     border-color: red.darken(40%)
-//   ),
-//   body-style: (
-//     align: center
-//   ),
-//   sep: (
-//     dash: "dashed"
-//   ),
-//   shadow: (
-// 	  offset: (x: 2pt, y: 3pt),
-//     color: yellow.lighten(70%)
-//   ),
-//   [This is an important message!],
-//   [Be careful outside. There are dangerous bananas!]
-// )
+showybox(
+  frame: (
+    dash: "dashed",
+    border-color: red.darken(40%)
+  ),
+  body-style: (
+    align: center
+  ),
+  sep: (
+    dash: "dashed"
+  ),
+  shadow: (
+	  offset: (x: 2pt, y: 3pt),
+    color: yellow.lighten(70%)
+  ),
+  [This is an important message!],
+  [Be careful outside. There are dangerous bananas!]
+)
 
   })
 ]

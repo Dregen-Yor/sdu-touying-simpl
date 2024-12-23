@@ -61,8 +61,7 @@
     width: 100%,
     fill: self.colors.primary,
     grid(
-      
-      columns: (auto,auto, 1fr, auto,auto,auto),
+      columns: (auto,auto, 0.9fr, auto,auto,auto),
       h(0.5em),
       text(fill: self.colors.neutral-lightest.lighten(40%), utils.call-or-display(self, self.store.footer-a)),
       none,
