@@ -6,6 +6,8 @@
 
 ![](./example/figures/main.png)
 
+对于字体，可以到本项目的[Github仓库](https://github.com/Dregen-Yor/sdu-touying)下载
+
 ## TODO
 
 - 修改 footer，提供 footer 自定义API

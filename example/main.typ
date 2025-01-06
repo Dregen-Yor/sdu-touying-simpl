@@ -1,8 +1,5 @@
 #set text(font: "Source Han Serif", lang: "CN",region: "CN")
-#import "../lib.typ": *
-// #import "test-theme.typ": *
-// #show: "调试信息：模板加载成功111"
-// #show: dewdrop-theme.with(aspect-ratio: "16-9")
+#import "@preview/sdu-touying:0.1.0": *
 
 #show: sdu-theme.with(
   aspect-ratio: "16-9",
@@ -19,7 +16,7 @@
 #show heading.where(level: 1): set heading(numbering: "1.")
 #title-slide()
 
-= 第一章：字体变
+= 第一章：基础功能
 
 == 想分列显示？
 
@@ -387,7 +384,7 @@ tip(title: "Best tip ever")[Check out this cool package]
 
 #ending-slide[
   #align(center + horizon)[
-  #set text(size: 3em, weight: "bold", sdu_red)
+  #set text(size: 3em, weight: "bold", sdu-red)
 
   THANKS FOR ALL
 

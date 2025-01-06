@@ -1,5 +1,5 @@
 #import "dependency.typ": *
-#let sdu_red=rgb("#880000")
+#let sdu-red=rgb("#880000")
 #set text(region: "CN")
 #let title-slide(
   config:(:),
@@ -74,7 +74,7 @@
   
 }
 
-#let footer_backend(self)={
+#let footer-backend(self)={
   self=>[
       #if self.store.footer == true {  
         set text(0.7em)
@@ -316,10 +316,10 @@
 
   show: touying-slides.with(
     config-colors(
-      primary: sdu_red,
+      primary: sdu-red,
       primary-dark: rgb("#004098"),
       secondary: rgb("#ffffff"),
-      tertiary: sdu_red,
+      tertiary: sdu-red,
       neutral-lightest: rgb("#ffffff"),
       neutral-darkest: rgb("#000000"),
       themeblue: rgb("#4285f4"),
