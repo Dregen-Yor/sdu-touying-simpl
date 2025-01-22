@@ -1,6 +1,62 @@
 #import "dependency.typ": *
 #let sdu-red=rgb("#880000")
+#let sdu-logo=image("img/sdu.png",width:40%)
 #set text(region: "CN")
+#let sdu-progressive-outline(
+  alpha: 60%,
+  level: 1,
+  transform: (cover: false, alpha: 60%, ..args, it) => if not cover {
+    // set outline(depth: 1)
+    text(fill: sdu-red, it)
+  } else {
+    text(fill: utils.update-alpha(text.fill, alpha),it)
+  },
+  depth: 2,
+  ..args,
+) = (
+  context {
+    // 获取当前一级标题的起始页和结束页
+    let start-page = 1
+    let end-page = calc.inf
+    if level != none {
+      let current-heading = utils.current-heading(level: level)
+      if current-heading != none {
+        start-page = current-heading.location().page()
+        let next-headings = query(
+          selector(heading.where(level: level)).after(inclusive: false, current-heading.location()),
+        )
+        if next-headings != () {
+          end-page = next-headings.at(0).location().page()
+        } else {
+          end-page = calc.inf
+        }
+      }
+    }
+
+    // for (key, value) in args.named() {
+    //   show: text(key + ": ")
+    // }
+    // 显示当前一级标题下的子页面，隐藏其他一级标题下的子页面
+    show outline.entry.where(
+      
+    ): it => {
+      let c=it.element.location().page() < start-page or it.element.location().page() >= end-page
+        if c{
+          none
+        }
+        else {}
+        transform(
+          cover: c,
+          level: level,
+          alpha: alpha,
+          it,
+        )
+      
+      }
+    outline(..args)
+
+  }
+)
 #let title-slide(
   config:(:),
   extra:none,
@@ -64,7 +120,7 @@
       columns: (auto,auto, 0.9fr, auto,auto,auto),
       h(0.5em),
       text(fill: self.colors.neutral-lightest.lighten(40%), utils.call-or-display(self, self.store.footer-a)),
-      none,
+      text(fill: self.colors.neutral-lightest.lighten(40%), utils.call-or-display(self, self.store.footer-c)),
       text(fill: self.colors.neutral-lightest.lighten(10%), utils.call-or-display(self, self.store.footer-d)),
       h(0.5em),
       text(fill: self.colors.neutral-lightest.lighten(10%), utils.call-or-display(self, self.store.footer-g)),
@@ -178,10 +234,10 @@
   )
 })
 
-#let new-section-slide(config:(:),title: utils.i18n-outline-title, ..args, body) = touying-slide-wrapper(self=>{
+#let new-section-slide(config:(:),title: "", ..args, body) = touying-slide-wrapper(self=>{
   self = utils.merge-dicts(
     self,
-    config-page(),
+    // config-page(),
   )
    touying-slide(
     self: self,
@@ -195,7 +251,7 @@
       ),
       text(
         fill: self.colors.neutral-darkest,
-        components.progressive-outline(
+        sdu-progressive-outline(
           alpha: self.store.alpha,
           title: none,
           indent: 1em,
@@ -232,7 +288,7 @@
 })
 
 
-#let focus-slide(config:(:),background-color: none,background-img:none,body)=touying-slide-wrapper(self => {
+#let focus-slide(config:(:),background-color: sdu-red,background-img:none,body)=touying-slide-wrapper(self => {
   let background-color = if background-img == none and background-color ==  none {
     self.colors.primary
   } else {
@@ -300,7 +356,7 @@
   footer-line-color:none,
   footer-columns:true,
   footer-a:self=>self.info.author,
-  footer-b:self=>utils.info-date(self),
+  footer-b:self=>none,
   footer-c:self=>if self.info.short-title == auto {
     self.info.title
   }else{
@@ -361,34 +417,31 @@
         #align(left+top)[
           #context {  
             let page = here().page()
+            let heads = query(selector(heading.where(level: 1)))
             let headings = query(selector(heading.where(level: 2)))
             let heading = headings.rev().find(x => x.location().page() <= page)
-            if heading != none {
-              if (self.store.theme == "full") {
-                block(
-                  width:100%,
-                  fill: self.colors.primary,
-                  height: self.store.space*1.8,
-                  // outset: (x: 0.5 * self.store.space)
-                )[
-                  #set text(1.4em, weight: "bold", fill: white)
-                  #v(self.store.space / 2)
-                  #heading.body 
-                  #if not heading.location().page() == page [
-                    #{numbering("(i)", page - heading.location().page() + 1)}
-                  ]
-                ]
+            let is-new-section = heads.any(it => it.location().page() == page) or utils.slide-counter == utils.last-slide-number
+            if not is-new-section{
+              if heading != none {
+                if (self.store.theme == "normal") {
+                  v(self.store.space /1)
+                  // h(self)
+                  set text(1.4em, weight: "bold", fill: self.colors.primary)
+                  block(h(1cm)+heading.body +
+                    if not heading.location().page() == page [
+                      #{numbering("(i)", page - heading.location().page() + 1)}
+                    ]
+                  )
+                }
               }
-              else if (self.store.theme == "normal") {
-                v(self.store.space /1)
-                // h(self)
-                set text(1.4em, weight: "bold", fill: self.colors.primary)
-                block(h(1cm)+heading.body +
-                  if not heading.location().page() == page [
-                    #{numbering("(i)", page - heading.location().page() + 1)}
-                  ]
-                )
-              }
+            }
+            else{
+              set text(1.4em, weight: "bold", fill: self.colors.primary)
+              v(self.store.space /1)
+                  // h(self)
+                  set text(1.4em, weight: "bold", fill: self.colors.primary)
+                  block(h(1cm)+"目录"
+                  )
             }
           }
         ]

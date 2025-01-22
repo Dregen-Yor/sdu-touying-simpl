@@ -1,5 +1,6 @@
 #set text(font: "Source Han Serif", lang: "CN",region: "CN")
-#import "@preview/sdu-touying-simpl:0.1.0": *
+#import "@preview/sdu-touying-simpl:0.2.0": *
+
 
 #show: sdu-theme.with(
   aspect-ratio: "16-9",
@@ -9,8 +10,9 @@
     author: [孙更欣],
     date: datetime.today(),
     institution: [Institution],
-    logo:image("../img/sdu.png",width:40%)
+    logo:sdu-logo
   ),
+  footer-line-color: sdu-red,
 )
 #set heading(numbering: "1.1")
 #show heading.where(level: 1): set heading(numbering: "1.")
@@ -352,31 +354,30 @@ tip(title: "Best tip ever")[Check out this cool package]
 
 = 第三章：页面
 
-// == focus-slide
+== focus-slide
 
-// #focus-slide[
-//   聚焦页
-// ]
+#focus-slide[
+  聚焦页
+]
 
-// == matrix-slide
+== matrix-slide
 
-// #matrix-slide[
-//   left
-// ][
-//   middle
-// ][
-//   right
-// ]
+#matrix-slide[
+  left
+][
+  middle
+][
+  right
+]
 
-// #matrix-slide(columns: 1)[
-//   top
-// ][
-//   bottom
-// ]
+#matrix-slide(columns: 1)[
+  top
+][
+  bottom
+]
 
-// #matrix-slide(columns: (1fr, 2fr, 1fr), ..(lorem(8),) * 9)
+#matrix-slide(columns: (1fr, 2fr, 1fr), ..(lorem(8),) * 9)
 
-== demo页
 
 // #BlueBox(title: "你好")[bubu]
 
