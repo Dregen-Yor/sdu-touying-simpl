@@ -11,7 +11,6 @@
   } else {
     text(fill: utils.update-alpha(text.fill, alpha),it)
   },
-  depth: 2,
   ..args,
 ) = (
 
@@ -55,7 +54,6 @@
       
       }
     outline(..args)
-
   }
 )
 #let d-outline(self: none, enum-args: (:), list-args: (:), cover: true) = states.touying-progress-with-sections(dict => {
@@ -262,11 +260,13 @@
           let is-new-section = heads.any(it => it.location().page() == page) or utils.slide-counter == utils.last-slide-number
           if not is-new-section{
             if heading != none {
+              
               if (self.store.theme == "normal") {
                 v(self.store.space /1)
                 // h(self)
+                
                 set text(1.4em, weight: "bold", fill: self.colors.primary)
-                block(heading.body +
+                block(h(0.3cm)+heading.body +
                   if not heading.location().page() == page [
                     #{numbering("(i)", page - heading.location().page() + 1)}
                   ]
@@ -276,7 +276,32 @@
           }
         }
       },
-      utils.call-or-display(self, self.store.header-right),
+      {[#if self.store.count == true {
+        
+        [
+          #context {
+            let last = counter(page).final().first()
+            let current = here().page()
+            // Before the current page
+            for i in range(1,current) {
+              link((page:i, x:0pt,y:0pt))[
+                #box(circle(radius: 0.08cm, fill: self.colors.primary, stroke: 1pt+self.colors.primary)) 
+              ]
+            }
+            // Current Page
+            link((page:current, x:0pt,y:0pt))[
+                #box(circle(radius: 0.08cm, fill: self.colors.primary, stroke: 1pt+self.colors.primary)) 
+              ]
+            // After the current page
+            for i in range(current+1,last+1) {
+              link((page:i, x:0pt,y:0pt))[
+                #box(circle(radius: 0.08cm, stroke: 1pt+self.colors.primary)) 
+              ]
+            }
+            }
+            #h(1cm)
+          ] 
+        }]}
     )
   }
   self = utils.merge-dicts(
@@ -294,7 +319,6 @@
     ),
   )
   let new-setting = body => {
-    v(1em)
     show: std.align.with(horizon)
     set text(fill: self.colors.neutral-darkest)
     show: setting
@@ -326,7 +350,7 @@
           alpha: self.store.alpha,
           title: none,
           indent: 1em,
-          depth: self.slide-level,
+          depth: 1,
           ..args,
         ),
       ),
