@@ -14,6 +14,7 @@
   depth: 2,
   ..args,
 ) = (
+
   context {
     // 获取当前一级标题的起始页和结束页
     let start-page = 1
@@ -57,6 +58,43 @@
 
   }
 )
+#let d-outline(self: none, enum-args: (:), list-args: (:), cover: true) = states.touying-progress-with-sections(dict => {
+  let (current-sections, final-sections) = dict
+  current-sections = current-sections.filter(section => section.loc != none)
+  final-sections = final-sections.filter(section => section.loc != none)
+  let current-index = current-sections.len() - 1
+  let d-cover(i, body) = if i != current-index and cover {
+    set text(weight: "medium")
+    (self.methods.d-cover)(self: self, body)
+  } else {
+    // set text(weight: "bold")
+    // set text(fill: self.colors.neutral-dark)
+    if cover {
+      body
+    } else {
+      set text(weight: "medium")
+      body
+    }
+  }
+  set enum(..enum-args)
+  set list(..enum-args)
+  set text(fill: self.colors.primary, weight: "bold")
+  for (i, section) in final-sections.enumerate() {
+    d-cover(i, {
+      enum.item(i + 1, [#link(section.loc, section.title)<touying-link>] + if section.children.filter(it => it.kind != "slide").len() > 0 {
+        let subsections = section.children.filter(it => it.kind != "slide")
+        set text(fill: self.colors.neutral-dark, size: 0.9em)
+        set text(weight: "medium")
+        if i == current-index {
+          list(
+          ..subsections.map(subsection => [#link(subsection.loc, subsection.title)<touying-link>])
+          )
+        }
+      })
+    })
+    parbreak()
+  }
+})
 #let title-slide(
   config:(:),
   extra:none,
@@ -129,7 +167,7 @@
   )
   
 }
-
+  
 #let footer-backend(self)={
   self=>[
       #if self.store.footer == true {  
@@ -200,39 +238,72 @@
       ]
 }
 #let slide(
-  config:(:),
   title: auto,
-  subtitle: auto,
-  header: auto,
-  footer: auto,
-  display-current-section: auto,
-  ..args,
-) = touying-slide-wrapper(self => {
-  if title != auto {
-    self.title = title
+  align: auto,
+  config: (:),
+  repeat: auto,
+  setting: body => body,
+  composer: auto,
+  ..bodies,
+)= touying-slide-wrapper(self => {
+  let header(self) = {
+    set std.align(top)
+    show: components.cell.with(fill: self.colors.secondary, inset: 1em)
+    set std.align(horizon)
+    set text(fill: self.colors.secondary-dark, weight: "medium", size: 1.2em)
+    v(1em)
+    components.left-and-right(
+      {
+        context {
+          let page = here().page()
+          let heads = query(selector(heading.where(level: 1)))
+          let headings = query(selector(heading.where(level: 2)))
+          let heading = headings.rev().find(x => x.location().page() <= page)
+          let is-new-section = heads.any(it => it.location().page() == page) or utils.slide-counter == utils.last-slide-number
+          if not is-new-section{
+            if heading != none {
+              if (self.store.theme == "normal") {
+                v(self.store.space /1)
+                // h(self)
+                set text(1.4em, weight: "bold", fill: self.colors.primary)
+                block(heading.body +
+                  if not heading.location().page() == page [
+                    #{numbering("(i)", page - heading.location().page() + 1)}
+                  ]
+                )
+              }
+            }
+          }
+        }
+      },
+      utils.call-or-display(self, self.store.header-right),
+    )
   }
-  if subtitle != auto {
-    self.subtitle = subtitle
-  }
-  if header != auto {
-    self.header = header
-  }
-  if footer != auto {
-    self.footer = footer
-  }
-  if display-current-section != auto {
-    self.display-current-section = display-current-section
-  }
-  touying-slide(
-    ..args.named(),
-    self: self,
-    setting: body => {
-      show: args.named().at("setting", default: body => body)
-      align(horizon, body)
-    },
-    ..args.pos(),
+  self = utils.merge-dicts(
+    self,
+    config,
+    config-common(freeze-slide-counter: false),
+    config-page(),
+  ) 
+  let self = utils.merge-dicts(
+    self,
+    config-page(
+      fill: self.colors.neutral-lightest,
+      header: header,
+      footer: self.methods.footer,
+    ),
   )
+  let new-setting = body => {
+    v(1em)
+    show: std.align.with(horizon)
+    set text(fill: self.colors.neutral-darkest)
+    show: setting
+    body
+  }
+  touying-slide(self: self, config: config, repeat: repeat, setting: new-setting, composer: composer, ..bodies)
 })
+
+
 
 #let new-section-slide(config:(:),title: "", ..args, body) = touying-slide-wrapper(self=>{
   self = utils.merge-dicts(
@@ -353,6 +424,10 @@
 
 #let sdu-theme(
   aspect-ratio: "16-9",
+  header: self => utils.display-current-heading(
+    setting: utils.fit-to-width.with(grow: false, 100%),
+    depth: self.slide-level,
+  ),
   footer-line-color:none,
   footer-columns:true,
   footer-a:self=>self.info.author,
@@ -400,6 +475,8 @@
           ),
         ),
       ),
+      header:header,
+      header-right: none,
       footer-a: footer-a,
       footer-b: footer-b,
       footer-c: footer-c,
@@ -408,87 +485,23 @@
       footer-g:footer-g,
     ),
     config-common(
+      slide-fn: slide,
       new-section-slide-fn: new-section-slide,
     ),
     config-page(
       paper: "presentation-" + aspect-ratio,
       margin: (top: 2.5cm, bottom: 2cm, x: 1.3cm),
-      header: self=>[
-        #align(left+top)[
-          #context {  
-            let page = here().page()
-            let heads = query(selector(heading.where(level: 1)))
-            let headings = query(selector(heading.where(level: 2)))
-            let heading = headings.rev().find(x => x.location().page() <= page)
-            let is-new-section = heads.any(it => it.location().page() == page) or utils.slide-counter == utils.last-slide-number
-            if not is-new-section{
-              if heading != none {
-                if (self.store.theme == "normal") {
-                  v(self.store.space /1)
-                  // h(self)
-                  set text(1.4em, weight: "bold", fill: self.colors.primary)
-                  block(h(1cm)+heading.body +
-                    if not heading.location().page() == page [
-                      #{numbering("(i)", page - heading.location().page() + 1)}
-                    ]
-                  )
-                }
-              }
-            }
-            else{
-              set text(1.4em, weight: "bold", fill: self.colors.primary)
-              v(self.store.space /1)
-                  // h(self)
-                  set text(1.4em, weight: "bold", fill: self.colors.primary)
-                  block(h(1cm)+"目录"
-                  )
-            }
-          }
-        ]
-        
-    // COUNTER
-      #if self.store.count == true {
-        v(-self.store.space/1)
-        align(right+top)[
-          #context {
-            let last = counter(page).final().first()
-            let current = here().page()
-            // Before the current page
-            for i in range(1,current) {
-              link((page:i, x:0pt,y:0pt))[
-                #box(circle(radius: 0.08cm, fill: self.colors.primary, stroke: 1pt+self.colors.primary)) 
-              ]
-            }
-            // Current Page
-            link((page:current, x:0pt,y:0pt))[
-                #box(circle(radius: 0.08cm, fill: self.colors.primary, stroke: 1pt+self.colors.primary)) 
-              ]
-            // After the current page
-            for i in range(current+1,last+1) {
-              link((page:i, x:0pt,y:0pt))[
-                #box(circle(radius: 0.08cm, stroke: 1pt+self.colors.primary)) 
-              ]
-            }
-            }
-            #h(1cm)
-          ] 
-        }
-      ],
-      footer:sdu-footer,
+      
       header-ascent:2cm,
       footer-descent:0%,
       
     ),
     config-methods(
-      slide:slide,
-      title-slide:title-slide,
-      // outline-slide:outline-slide,
-      new-section-slide:new-section-slide,
-      ending-slide:ending-slide,
-      focus-slide:focus-slide,
-      matrix-slide:matrix-slide,
-      slides:slides,
-      touying-new-section-slide:new-section-slide,
+      d-cover: (self: none, body) => {
+        utils.cover-with-rect(fill: utils.update-alpha(
+          constructor: rgb, self.page-args.fill, self.d-alpha), body)
+      },
+      footer:sdu-footer,
       alert:(self:none,it)=>text(fill:self.colors.primary, it),
       tblock:(self:none,title:none,it)=>{
         grid(

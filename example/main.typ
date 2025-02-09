@@ -1,5 +1,5 @@
 #set text(font: "Source Han Serif", lang: "CN",region: "CN")
-#import "@preview/sdu-touying-simpl:0.2.0": *
+#import "../lib.typ": *
 
 
 #show: sdu-theme.with(
@@ -20,6 +20,10 @@
 
 = 第一章：基础功能
 
+== 我是谁
+
+测试
+
 == 想分列显示？
 
 #slide(composer: (1fr,1fr, auto))[
@@ -28,10 +32,7 @@
 ][
   *Second column.第二列*
 ][
-  #figure(
-    image("../img/brand-rust.svg", width: 30%),
-    caption: [Rust logo],
-  )
+  #sdu-logo
 ]
 
 == 表格
@@ -381,7 +382,7 @@ tip(title: "Best tip ever")[Check out this cool package]
 
 // #BlueBox(title: "你好")[bubu]
 
-== 致谢
+== 致谢<touying:unoutlined>
 
 #ending-slide[
   #align(center + horizon)[
