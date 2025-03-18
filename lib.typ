@@ -9,7 +9,7 @@
     // set outline(depth: 1)
     text(fill: sdu-red, it)
   } else {
-    text(fill: utils.update-alpha(text.fill, alpha),it)
+    text(fill: ty.utils.update-alpha(text.fill, alpha),it)
   },
   ..args,
 ) = (
@@ -19,7 +19,7 @@
     let start-page = 1
     let end-page = calc.inf
     if level != none {
-      let current-heading = utils.current-heading(level: level)
+      let current-heading = ty.utils.current-heading(level: level)
       if current-heading != none {
         start-page = current-heading.location().page()
         let next-headings = query(
@@ -32,23 +32,15 @@
         }
       }
     }
-
-    // for (key, value) in args.named() {
-    //   show: text(key + ": ")
-    // }
-    // 显示当前一级标题下的子页面，隐藏其他一级标题下的子页面
     show outline.entry.where(
       
     ): it => {
       let c=it.element.location().page() < start-page or it.element.location().page() >= end-page
-        if c{
-          none
-        }
-        else {}
         transform(
           cover: c,
           level: level,
           alpha: alpha,
+          depth: 2,
           it,
         )
       
@@ -56,49 +48,12 @@
     outline(..args)
   }
 )
-#let d-outline(self: none, enum-args: (:), list-args: (:), cover: true) = states.touying-progress-with-sections(dict => {
-  let (current-sections, final-sections) = dict
-  current-sections = current-sections.filter(section => section.loc != none)
-  final-sections = final-sections.filter(section => section.loc != none)
-  let current-index = current-sections.len() - 1
-  let d-cover(i, body) = if i != current-index and cover {
-    set text(weight: "medium")
-    (self.methods.d-cover)(self: self, body)
-  } else {
-    // set text(weight: "bold")
-    // set text(fill: self.colors.neutral-dark)
-    if cover {
-      body
-    } else {
-      set text(weight: "medium")
-      body
-    }
-  }
-  set enum(..enum-args)
-  set list(..enum-args)
-  set text(fill: self.colors.primary, weight: "bold")
-  for (i, section) in final-sections.enumerate() {
-    d-cover(i, {
-      enum.item(i + 1, [#link(section.loc, section.title)<touying-link>] + if section.children.filter(it => it.kind != "slide").len() > 0 {
-        let subsections = section.children.filter(it => it.kind != "slide")
-        set text(fill: self.colors.neutral-dark, size: 0.9em)
-        set text(weight: "medium")
-        if i == current-index {
-          list(
-          ..subsections.map(subsection => [#link(subsection.loc, subsection.title)<touying-link>])
-          )
-        }
-      })
-    })
-    parbreak()
-  }
-})
 #let title-slide(
   config:(:),
   extra:none,
   ..args
 )=touying-slide-wrapper(self=>{
-  self = utils.merge-dicts(
+  self = ty.utils.merge-dicts(
     self,
     config,
     config-common(freeze-slide-counter: true),
@@ -155,11 +110,11 @@
     grid(
       columns: (auto,auto, 0.9fr, auto,auto,auto),
       h(0.5em),
-      text(fill: self.colors.neutral-lightest.lighten(40%), utils.call-or-display(self, self.store.footer-a)),
-      text(fill: self.colors.neutral-lightest.lighten(40%), utils.call-or-display(self, self.store.footer-c)),
-      text(fill: self.colors.neutral-lightest.lighten(10%), utils.call-or-display(self, self.store.footer-d)),
+      text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-a)),
+      text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-c)),
+      text(fill: self.colors.neutral-lightest.lighten(10%), ty.utils.call-or-display(self, self.store.footer-d)),
       h(0.5em),
-      text(fill: self.colors.neutral-lightest.lighten(10%), utils.call-or-display(self, self.store.footer-g)),
+      text(fill: self.colors.neutral-lightest.lighten(10%), ty.utils.call-or-display(self, self.store.footer-g)),
       v(0.2em)
     )
   )
@@ -257,7 +212,7 @@
           let heads = query(selector(heading.where(level: 1)))
           let headings = query(selector(heading.where(level: 2)))
           let heading = headings.rev().find(x => x.location().page() <= page)
-          let is-new-section = heads.any(it => it.location().page() == page) or utils.slide-counter == utils.last-slide-number
+          let is-new-section = heads.any(it => it.location().page() == page) or ty.utils.slide-counter == ty.utils.last-slide-number
           if not is-new-section{
             if heading != none {
               
@@ -304,13 +259,13 @@
         }]}
     )
   }
-  self = utils.merge-dicts(
+  self = ty.utils.merge-dicts(
     self,
     config,
     config-common(freeze-slide-counter: false),
     config-page(),
   ) 
-  let self = utils.merge-dicts(
+  let self = ty.utils.merge-dicts(
     self,
     config-page(
       fill: self.colors.neutral-lightest,
@@ -330,7 +285,7 @@
 
 
 #let new-section-slide(config:(:),title: "", ..args, body) = touying-slide-wrapper(self=>{
-  self = utils.merge-dicts(
+  self = ty.utils.merge-dicts(
     self,
     // config-page(),
   )
@@ -342,7 +297,7 @@
         1.2em,
         fill: self.colors.primary,
         weight: "bold",
-        utils.call-or-display(self, title),
+        ty.utils.call-or-display(self, title),
       ),
       text(
         fill: self.colors.neutral-darkest,
@@ -350,7 +305,7 @@
           alpha: self.store.alpha,
           title: none,
           indent: 1em,
-          depth: 1,
+          depth: 2,
           ..args,
         ),
       ),
@@ -389,7 +344,7 @@
   } else {
     background-color
   }
-  self = utils.merge-dicts(
+  self = ty.utils.merge-dicts(
     self,
     config,
     config-common(freeze-slide-counter: true),
@@ -400,7 +355,7 @@
 })
 
 #let matrix-slide(config: (:), columns: none, rows: none, ..bodies) = touying-slide-wrapper(self => {
-    self = utils.merge-dicts(
+    self = ty.utils.merge-dicts(
     self,
     config,
     config-common(freeze-slide-counter: true),
@@ -461,7 +416,7 @@
   }else{
     self.info.short-title
   },
-  footer-d:context utils.slide-counter.display() + " / " + utils.last-slide-number,
+  footer-d:context ty.utils.slide-counter.display() + " / " + ty.utils.last-slide-number,
   footer-g: self => {
     link("https://github.com/Dregen-Yor/sdu-typst-touying",image("img/github-mark-white.svg",width:1.2em))
   },
