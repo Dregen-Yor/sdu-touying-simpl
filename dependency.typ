@@ -6,7 +6,7 @@
 #import "@preview/timeliney:0.2.0"
 
 // https://typst.app/universe/package/codly
-#import "@preview/codly:1.2.0": *
+#import "@preview/codly:1.3.0": *
 
 //https://typst.app/universe/package/fletcher
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge

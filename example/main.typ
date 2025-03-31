@@ -1,7 +1,12 @@
-#set text(font: "Source Han Serif", lang: "CN",region: "CN")
 #import "../lib.typ": *
-
-
+#set text(font: (
+  (
+    name: "Inria Serif",
+    covers: "latin-in-cjk",
+  ),
+  "Noto Serif CJK SC"
+))
+// #set text(font: "Source Han Serif", lang: "CN",region: "CN")
 #show: sdu-theme.with(
   aspect-ratio: "16-9",
    config-info(
@@ -60,7 +65,6 @@
 ]
 == 数学公式
 行内公式：$a^2 + b^2 = c^2$
-
 块级公式：
 
 $ E=m c^2\ angle.l a, b angle.r &= arrow(a) dot arrow(b) \
