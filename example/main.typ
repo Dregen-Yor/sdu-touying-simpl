@@ -1,4 +1,26 @@
 #import "../lib.typ": *
+// https://typst.app/universe/package/timeliney
+#import "@preview/timeliney:0.2.0"
+
+// https://typst.app/universe/package/codly
+#import "@preview/codly:1.3.0": *
+#import "@preview/codly-languages:0.1.1": *
+#show: codly-init.with()
+
+#codly(languages: codly-languages)
+//https://typst.app/universe/package/fletcher
+#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
+
+//https://typst.app/universe/package/ctheorems
+#import "@preview/ctheorems:1.1.3": *
+#show: thmrules
+
+//https://typst.app/universe/package/showybox
+#import "@preview/showybox:2.0.4": showybox
+
+// https://typst.app/universe/package/gentle-clues
+#import "@preview/gentle-clues:1.2.0": *
+
 #set text(font: (
   (
     name: "Inria Serif",
@@ -14,7 +36,7 @@
     subtitle: [Continuously Improving...],
     author: [孙更欣],
     date: datetime.today(),
-    institution: [Institution],
+    institution: [计算机科学与技术学院],
     logo:sdu-logo
   ),
   footer-line-color: sdu-red,

@@ -1,6 +1,6 @@
 #import "dependency.typ": *
 #let sdu-red=rgb("#880000")
-#let sdu-logo=image("img/sdu.png",width:40%)
+#let sdu-logo=image("img/sdu.png",height: 10%)
 #set text(region: "CN")
 #let sdu-progressive-outline(
   alpha: 60%,
@@ -62,40 +62,50 @@
   let info=self.info+args.named()
   let body={
     
-    if info.logo!=none{
-      align(center+horizon,info.logo)
+    if info.logo != none {
+      v(1em)
+      pad(left: 1cm)[
+        #info.logo
+      ]
     }
-    let  content={
-      block(
-        fill: self.colors.primary,
-        inset: 1.5em,
-        radius: 0.5em,
-        breakable: false,
-        width: 80%,
-        {
-          text(size: 1.2em, fill: self.colors.neutral-lightest, weight: "bold", info.title)
-          if info.subtitle != none {
+    v(-0.7em)
+    image("img/sdu-title.png") 
+    
+    let content = {
+      text(
+        size: 1.35em,
+        fill: white,
+        weight: "bold",
+        info.title,
+      )
+      if info.subtitle != none {
             parbreak()
             text(size: 1.0em, fill: self.colors.neutral-lightest, weight: "bold", info.subtitle)
           }
-        },
-      )
       grid(
-        text(fill:black,info.author)
+        text(fill:white,info.author)
       )
-      v(0.2em)
+      // v(0.2em)
       // 介绍
       if info.institution != none {
         parbreak()
-        text(size: 0.8em, info.institution)
+        text(size: 0.8em,fill:white, info.institution)
       }
       // 日期
       if info.date != none {
         parbreak()
-        text(size: 1.0em, datetime.today().display())
+        text(size: 1.0em,fill: white, info.date.display())
       }
     }
-    align(center+horizon,content)
+    
+    place(
+      dx: 2em,
+      dy: -13.2em,
+      content,
+    )
+    align(right,pad(right: 0.7cm)[
+        #image("img/word.png")
+      ])
   }
   touying-slide(self: self,body)
 })
