@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 // https://typst.app/universe/package/timeliney
-#import "@preview/timeliney:0.2.0"
+#import "@preview/timeliney:0.2.1"
 
 // https://typst.app/universe/package/codly
 #import "@preview/codly:1.3.0": *
@@ -12,14 +12,14 @@
 #import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
 
 //https://typst.app/universe/package/ctheorems
-#import "@preview/ctheorems:1.1.3": *
-#show: thmrules
+// #import "@preview/ctheorems:1.1.3": *
+// #show: thmrules
 
 //https://typst.app/universe/package/showybox
 #import "@preview/showybox:2.0.4": showybox
 
 // https://typst.app/universe/package/gentle-clues
-#import "@preview/gentle-clues:1.2.0": *
+// #import "@preview/gentle-clues:1.2.0": *
 
 #set text(font: (
   (
@@ -44,7 +44,7 @@
 #set heading(numbering: "1.1")
 #show heading.where(level: 1): set heading(numbering: "1.")
 #title-slide()
-
+#outline-slide([Outline])
 = 第一章：基础功能
 
 == 我是谁
@@ -53,14 +53,17 @@
 
 == 想分列显示？
 
-#slide(composer: (1fr,1fr, auto))[
-  展示
-  `void fn`
-][
+#columns(
+  3,
+  [展示`void fn`
+  #colbreak()
   *Second column.第二列*
-][
+  #colbreak()
   #sdu-logo
-]
+  ],
+
+)
+
 
 == 表格
 //表格内容设置在main.typ中
@@ -346,7 +349,7 @@ showybox(
 ][
   #align(center,{
 info[ This is the info clue ... ]
-tip(title: "Best tip ever")[Check out this cool package]
+// tip(title: "Best tip ever")[Check out this cool package]
   })
 ]
 
