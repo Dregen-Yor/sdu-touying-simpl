@@ -1,54 +1,102 @@
-# sdu-typst-touying
+# SDU-Touying-Simpl
 
-一个为山东大学设计的、基于强大的 Touying 库的简化 Typst 演示文稿模板。
-效果如下：
+一个为山东大学设计的、基于 [Touying](https://github.com/touying-typst/touying) 的 Typst 演示文稿模板。
+
+![演示效果](./example/figures/main.png)
+
 ## 目录
 
-- [关于](#关于)
+- [简介](#简介)
 - [特性](#特性)
-- [使用方法](#使用方法)
+- [安装](#安装)
+- [快速开始](#快速开始)
+- [主题定制](#主题定制)
+- [字体支持](#字体支持)
 - [许可证](#许可证)
 - [致谢](#致谢)
 
-## 关于
+## 简介
 
-`sdu-touying-simpl` 是一个专为 [Typst](https://typst.app/) 排版系统设计的演示文稿（幻灯片/Slide）模板库。它构建于强大的 Typst 幻灯片基础库 [`touying`](https://github.com/touying-typst/touying) 之上，旨在提供与 LaTeX 的 Beamer 包类似的功能，但运行在现代化的 Typst 生态系统中。
-
-`sdu-touying-simpl` 特别为**山东大学（SDU）**的学生量身定制，提供了一个可能更为简化的使用接口，并包含了与山大视觉形象一致的元素（如 Logo 和配色方案）。名称后缀 "simpl" 暗示其着重于易用性，让用户能够快速创建外观专业的演示文稿，而无需深入了解 `touying` 或 Typst 主题定制的全部复杂性。
+`sdu-touying-simpl` 是一个基于 [Typst](https://typst.app/) 和 [Touying](https://github.com/touying-typst/touying) 的演示文稿模板，专为山东大学师生设计。本项目旨在提供一个简单易用、美观大方的学术演示模板，同时保持与山东大学视觉形象的一致性。
 
 ## 特性
 
-* **现代化排版:** 基于 [Typst](https://typst.app/) 构建，编译速度快，语法清晰直观。
-* **强大的幻灯片引擎:** 由 [`touying`](https://github.com/touying-typst/touying) 驱动，继承了其核心特性，例如：
-    * 逐步显示 (`#pause`, `#uncover`, `#only`, `#alternatives` 等)
-    * 灵活的幻灯片布局
-    * 演讲者备注
-    * 讲义模式
-* **类 Beamer 体验:** 为从 LaTeX/Beamer 迁移过来的用户提供了熟悉的结构和工作流程。
-* **山大主题（推测）:** 可能预设了山东大学的 Logo、配色方案和字体，以保持品牌一致性。
-* **简化使用:** 相较于直接使用 `touying` 或从零开始构建主题，旨在提供更低的使用门槛。
+- **现代化排版系统**：基于 Typst 构建，提供快速的编译速度和清晰的语法
+- **完整的幻灯片功能**：
+  - 支持渐进式显示（`#pause`、`#uncover`、`#only` 等）
+  - 灵活的幻灯片布局系统
+  - 演讲者备注支持
+  - 讲义模式
+- **山大特色设计**：
+  - 内置山东大学校徽和视觉元素
+  - 采用山大标准红色（`#880000`）作为主题色
+  - 优化的中文字体支持
+- **丰富的幻灯片类型**：
+  - 标题页（`title-slide`）
+  - 大纲页（`outline-slide`）
+  - 标准内容页
+  - 自定义页脚样式
+- **主题定制**：
+  - 支持多种主题样式（`full` 和 `normal`）
+  - 可自定义页眉页脚
+  - 灵活的布局配置
 
-## 使用方法
+## 安装
 
-首先确保电脑中安装了 `typst-cli`，并执行
- 
-`typst init @preview/sdu-touying-simpl:0.3.0`
+### 方法一：通过 Typst Universe 安装
 
-或者在 [typst.app](https://typst.app/universe/package/sdu-touying-simpl) 中使用。
+```bash
+typst init @preview/sdu-touying-simpl:0.3.1
+```
+
+### 方法二：通过 [Typst.app](https://typst.app/universe/package/sdu-touying-simpl) 在线使用
+
+## 快速开始
+
+创建一个新的 Typst 文件（例如 `main.typ`），并添加以下内容：
+
+```typst
+#import "@preview/sdu-touying-simpl:0.3.1": *
+
+#show: sdu-theme.with(
+  title: "演示文稿标题",
+  author: "您的姓名",
+  subtitle: "副标题",
+  institution: "山东大学",
+  date: datetime.today(),
+)
+
+#title-slide()
+
+#outline-slide("目录")
+
+= 主题一
+
+== 页面一
+
+= 主题二
+
+== 页面二
+
+== 页面三
+```
 
 
-### 演示效果
-![](./example/figures/main.png)
+## 字体支持
 
-对于字体，可以到本项目的[Github仓库](https://github.com/Dregen-Yor/sdu-touying-simpl/tree/main/fonts)下载
+本项目支持中文字体，您可以从以下位置获取字体文件：
+
+1. 项目 [GitHub 仓库](https://github.com/Dregen-Yor/sdu-touying-simpl/tree/main/fonts) 的 `fonts` 目录
+2. 将字体文件放置在您的项目目录中
+3. 在文档中通过 `#set text(font: "字体名称")` 设置字体
 
 ## 许可证
 
-本项目采用 GPL-3.0 许可证。详细信息请参阅 LICENSE 文件。
+本项目采用 GPL-3.0 许可证。详见 [LICENSE](LICENSE) 文件。
 
 ## 致谢
 
-感谢舍友提供的素材。
-
-感谢 [PolyU Beamer Slides](https://www.overleaf.com/latex/templates/polyu-beamer-slides/pyhhgmgmvzhg) 提供的封面灵感。
+- 感谢 [Touying](https://github.com/touying-typst/touying) 项目提供的强大基础
+- 感谢 [PolyU Beamer Slides](https://www.overleaf.com/latex/templates/polyu-beamer-slides/pyhhgmgmvzhg) 提供的设计灵感
+- 感谢所有为本项目提供反馈和建议的用户
 
