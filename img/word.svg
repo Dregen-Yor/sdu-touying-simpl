@@ -6,7 +6,7 @@
    version="1.1"
    id="svg3"
    sodipodi:docname="word.svg"
-   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   inkscape:version="1.4.1 (93de688d07, 2025-03-30)"
    inkscape:export-filename="word.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
@@ -25,7 +25,7 @@
      inkscape:deskcolor="#d1d1d1"
      showguides="true"
      inkscape:zoom="3.005"
-     inkscape:cx="216.97171"
+     inkscape:cx="217.1381"
      inkscape:cy="16.139767"
      inkscape:window-width="2560"
      inkscape:window-height="1360"
@@ -42,7 +42,7 @@
     </style>
   </defs>
   <g
-     transform="matrix(0.87050066,0,0,1.0021584,8.972968,49.989275)"
+     transform="matrix(0.75887156,0,0,1.003895,54.70365,50.014064)"
      id="g2">
     <line
        x1="46.533516"
@@ -69,13 +69,15 @@
        font-size="20px"
        font-weight="600"
        text-anchor="end"
-       id="text2">Knowledge Infinite• Spirit Vast</text>
+       id="text2"
+       style="-inkscape-font-specification:'Times New Roman,  Bold';font-family:'Times New Roman';font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal">Knowledge Infinite• Spirit Vast</text>
     <text
        x="-7.6539102"
        y="46.963394"
        class="text-custom-red"
        font-size="18px"
        text-anchor="end"
-       id="text3">学无止境·气有浩然</text>
+       id="text3"
+       style="-inkscape-font-specification:'Times New Roman, ';font-family:'Times New Roman';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">学无止境·气有浩然</text>
   </g>
 </svg>

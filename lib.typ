@@ -24,11 +24,7 @@
       } else if type(marker) == symbol {
         text(fill: self.colors.primary, marker)
       }
-      if sys.version < version(0, 13) {
-        block(stack(dir: ltr, spacing: .8em, mark, it.body), below: 0pt)
-      } else {
-        block(stack(dir: ltr, spacing: .8em, mark, it.body()), below: 0pt)
-      }
+      block(stack(dir: ltr, spacing: .8em, mark, link(it.element.location(), it.body())), below: 0pt)
     }
     show: pad.with(x: 1.6em)
     columns(column, outline(title: none, indent: 1em, depth: 1))
@@ -36,7 +32,7 @@
   self = utils.merge-dicts(
     self,
     config-page(
-      header: header+v(-4em),
+      header: header + v(-4em),
       margin: (top: 2em, bottom: 1.6em),
       fill: self.colors.neutral-lightest,
     ),
@@ -113,17 +109,17 @@
   show: pad.with(.0em)
   block(
     width: 100%,
+    height: 1.5em,
     fill: self.colors.primary,
-    grid(
-      columns: (auto, auto, 0.9fr, auto, auto, auto),
-      h(0.5em),
-      text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-a)),
-      text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-c)),
-      text(fill: self.colors.neutral-lightest.lighten(10%), ty.utils.call-or-display(self, self.store.footer-d)),
-      h(0.5em),
-      text(fill: self.colors.neutral-lightest.lighten(10%), ty.utils.call-or-display(self, self.store.footer-g)),
-
-      v(0.2em),
+    pad(
+      y: .4em,
+      x: 2em,
+      grid(
+        columns: (auto, 1fr, auto, auto),
+        text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-a)),
+        text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-c)),
+        text(fill: self.colors.neutral-lightest.lighten(10%), ty.utils.call-or-display(self, self.store.footer-d)),
+      ),
     ),
   )
 }
@@ -296,76 +292,61 @@
   let header = {
     ty.components.progress-bar(height: 8pt, self.colors.primary, self.colors.primary.lighten(40%))
   }
-  let footer = {
-    set align(bottom)
-    set text(size: 0.8em, fill: self.colors.neutral-lightest)
-    block(
-      height: 1.5em,
-      width: 100%,
-      fill: self.colors.primary,
-      pad(
-        y: .4em,
-        x: 2em,
-        ty.components.left-and-right(
-          text(utils.call-or-display(self, self.store.footer-a)),
-          text(utils.call-or-display(self, self.store.footer-c)),
-        ),
-      ),
-    )
-  }
   let body = {
     set align(horizon + center)
-    show: pad.with(20%)
+    show: pad.with(10%)
     set text(size: 1.5em, fill: self.colors.neutral-lightest, weight: "bold")
-    context{
-    block(
-      // outset: (right: 2pt, bottom: 2pt),
-      fill: self.colors.neutral-light,
-      radius: 8pt,
-      
-      move(
-        dx: -4pt,
-        dy: -4pt,
-        block(
-          width: 100%,
-          fill: self.colors.primary,
-          inset: (x: 1em, y: .8em),
-          radius: 8pt,
-          ty.utils.display-current-heading(level: level, numbered: numbered),
+    context {
+      block(
+        // outset: (right: 2pt, bottom: 2pt),
+        fill: self.colors.neutral-light,
+        radius: 8pt,
+        move(
+          dx: -4pt,
+          dy: -4pt,
+          block(
+            width: 100%,
+            fill: self.colors.primary,
+            inset: (x: 1em, y: .8em),
+            radius: 8pt,
+            ty.utils.display-current-heading(level: level, numbered: numbered),
+          ),
         ),
       )
-    )
-    let start-page = 1
-        let end-page = calc.inf
-        if level != none {
-          let current-heading = ty.utils.current-heading(level: level)
-          if current-heading != none {
-            start-page = current-heading.location().page()
-            let next-headings = query(
-              selector(heading.where(level: level)).after(inclusive: false, current-heading.location()),
-            )
-            if next-headings != () {
-              end-page = next-headings.at(0).location().page()
-            } else {
-              end-page = calc.inf
-            }
-          }
-        }
-        let chapters = query(
-          heading.where(
-            level: 2,
-            outlined: true,
+      let start-page = 1
+      let end-page = calc.inf
+      if level != none {
+        let current-heading = ty.utils.current-heading(level: level)
+        if current-heading != none {
+          start-page = current-heading.location().page()
+          let next-headings = query(
+            selector(heading.where(level: level)).after(inclusive: false, current-heading.location()),
           )
-        )
-        set text(size: 0.7em, fill: self.colors.neutral-darkest)
-        for chapter in chapters {
-          if chapter.location().page()>=start-page and chapter.location().page()<=end-page {
-            chapter.body 
-            v(0em)
-
+          if next-headings != () {
+            end-page = next-headings.at(0).location().page()
+          } else {
+            end-page = calc.inf
           }
-          
         }
+      }
+      let chapters = query(
+        heading.where(
+          level: 2,
+          outlined: true,
+        ),
+      )
+      set par(
+        first-line-indent: 0.5em,
+        spacing: 0.65em,
+        justify: true,
+      )
+      set text(size: 0.7em, fill: self.colors.primary)
+      for chapter in chapters {
+        if chapter.location().page() >= start-page and chapter.location().page() <= end-page {
+          link(chapter.location(), chapter.body)
+          v(0em)
+        }
+      }
     }
   }
   self = utils.merge-dicts(
@@ -373,7 +354,7 @@
     config-page(
       fill: self.colors.neutral-lightest,
       header: header,
-      footer: footer,
+      footer: sdu-footer,
       margin: 0em,
     ),
   )
@@ -497,9 +478,6 @@
     self.info.short-title
   },
   footer-d: context ty.utils.slide-counter.display() + " / " + ty.utils.last-slide-number,
-  footer-g: self => {
-    link("https://github.com/Dregen-Yor/sdu-touying-simpl", image("img/github-mark-white.svg", width: 1.2em))
-  },
   ..args,
   body,
 ) = {
@@ -544,7 +522,6 @@
       footer-c: footer-c,
       footer-d: footer-d,
       footer-line-color: footer-line-color,
-      footer-g: footer-g,
     ),
     config-common(
       slide-fn: slide,
