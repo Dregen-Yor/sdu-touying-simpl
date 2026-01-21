@@ -1,16 +1,16 @@
-// #import "@preview/sdu-touying-simpl:1.0.0" :*
+#import "@preview/sdu-touying-simpl:1.0.1" :*
 #import "../lib.typ" :*
 // https://typst.app/universe/package/timeliney
-#import "@preview/timeliney:0.2.1"
+// #import "@preview/timeliney:0.4.0"
 
 // https://typst.app/universe/package/codly
 #import "@preview/codly:1.3.0": *
-#import "@preview/codly-languages:0.1.1": *
+#import "@preview/codly-languages:0.1.8": *
 #show: codly-init.with()
 
 #codly(languages: codly-languages)
 //https://typst.app/universe/package/fletcher
-#import "@preview/fletcher:0.5.7" as fletcher: diagram, node, edge
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
 
 //https://typst.app/universe/package/ctheorems
 // 数学定理相关
@@ -75,7 +75,7 @@
     place(top, dx: 1.1em)[X]
   })
 }
-#import "@preview/octique:0.1.0": *
+
 #let LaTeX = {
   set text(font: "New Computer Modern", weight: "regular")
   box(width: 2.55em, {
@@ -799,7 +799,7 @@ tip(title: "Best tip ever")[Check out this cool package]
 #matrix-slide(columns: (1fr, 2fr, 1fr), ..(lorem(8),) * 9)
 
 == 引用
-引用如下（此处为空）。
+引用如下。@Author1978definition
 #bibliography("bibliography.bib", title: none)
 == 致谢<touying:unoutlined>
 + #Typst 官方文档 #linkto("https://typst.app/docs")

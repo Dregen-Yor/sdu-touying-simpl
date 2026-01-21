@@ -395,6 +395,13 @@
                           text([--], fill: self.colors.primary)))
         show figure.caption: set text(size: 0.6em)
         show footnote.entry: set text(size: 0.6em)
+        // 避免全局 list marker 影响参考文献编号样式
+        // 让参考文献编号与第一行对齐
+        show bibliography: it => {
+          show grid.cell.where(x: 0): it => align(top, it)
+          it
+        }
+        show bibliography: set text(size: 0.6em)
         show link: it => if type(it.dest) == str {
           set text(fill: self.colors.primary)
           it
