@@ -1,7 +1,7 @@
 #import "@preview/sdu-touying-simpl:1.0.1" :*
 // #import "../lib.typ" :*
 // https://typst.app/universe/package/timeliney
-// #import "@preview/timeliney:0.4.0"
+#import "@preview/timeliney:0.4.0"
 
 // https://typst.app/universe/package/codly
 #import "@preview/codly:1.3.0": *
@@ -462,7 +462,7 @@ Write inline equations like #mi("x") or #mi[y].
 行内公式：$a^2 + b^2 = c^2$
 块级公式：
 
-$ E=m c^2\ angle.l a, b angle.r &= arrow(a) dot arrow(b) \
+$ E=m c^2\ chevron.l a, b chevron.r &= arrow(a) dot arrow(b) \
                        &= a_1 b_1 + a_2 b_2 + ... a_n b_n \
                        &= sum_(i=1)^n a_i b_i.  $
 
