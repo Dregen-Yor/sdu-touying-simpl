@@ -1,12 +1,43 @@
 #import "dependency.typ": *
+#import "src/theorems.typ": sdu-theorem, sdu-definition, sdu-lemma, sdu-corollary, sdu-proof, sdu-example, show-sdu-theorems
+#import "src/code-blocks.typ": configure-codly, sdu-code
+#import "src/layouts.typ": sdu-columns, sdu-card, sdu-highlight, sdu-quote
 
 #let sdu-red = rgb("#880000")
 #let sdu-logo = image("img/sdu.png", height: 10%)
 #set text(region: "CN")
 
+// Color palette
 #let primary = sdu-red
+#let primary-light = primary.lighten(40%)
+#let secondary = rgb("#2c3e50")
 #let neutral-lightest = rgb("#ffffff")
+#let neutral-light = rgb("#f0f0f0")
+#let neutral-dark = rgb("#666666")
 #let neutral-darkest = rgb("#000000")
+#let accent = rgb("#e67e22")
+
+#let sdu-light-palette = (
+  primary: primary,
+  primary-light: primary-light,
+  secondary: secondary,
+  neutral-lightest: neutral-lightest,
+  neutral-light: neutral-light,
+  neutral-dark: neutral-dark,
+  neutral-darkest: neutral-darkest,
+  accent: accent,
+)
+
+#let sdu-dark-palette = (
+  primary: primary,
+  primary-light: primary.lighten(60%),
+  secondary: rgb("#ecf0f1"),
+  neutral-lightest: rgb("#1e1e2e"),
+  neutral-light: rgb("#2d2d2d"),
+  neutral-dark: rgb("#cccccc"),
+  neutral-darkest: rgb("#e0e0e0"),
+  accent: rgb("#f39c12"),
+)
 
 #let tblock(title: none, it) = {
   grid(
@@ -157,6 +188,30 @@
   )
 }
 
+#let _sdu-background(self) = {
+  rect(
+    width: 100%,
+    height: 100%,
+    fill: self.colors.neutral-lightest,
+    {
+      if self.store.background != none {
+        align(
+          left + bottom,
+          image(self.store.background, width: 100%),
+        )
+        place(
+          top + left,
+          rect(
+            width: 100%,
+            height: 100%,
+            fill: self.colors.neutral-lightest.transparentize(self.store.background-opacity * 100%),
+          ),
+        )
+      }
+    },
+  )
+}
+
 #let slide(
   title: auto,
   align: auto,
@@ -187,7 +242,8 @@
   let self = ty.utils.merge-dicts(
     self,
     config-page(
-      fill: self.colors.neutral-lightest,
+      fill: none,
+      background: _sdu-background(self),
       header: header,
       footer: self.methods.footer,
     ),
@@ -224,7 +280,7 @@
   }
   self = ty.utils.merge-dicts(
     self,
-    config-page(fill: self.colors.neutral-lightest, header: header),
+    config-page(fill: none, background: _sdu-background(self), header: header),
   )
   touying-slide(self: self, config: config, slide-body)
 })
@@ -322,6 +378,10 @@
 
 #let sdu-theme(
   aspect-ratio: "16-9",
+  variant: "light",
+  primary: none,
+  background: "img/background.png",
+  background-opacity: 0.4,
   header: self => ty.utils.display-current-heading(
     setting: ty.utils.fit-to-width.with(grow: false, 100%),
     depth: self.slide-level,
@@ -336,11 +396,25 @@
   ..args,
   body,
 ) = {
+  // Select palette based on variant
+  let palette = if variant == "dark" { sdu-dark-palette } else { sdu-light-palette }
+
+  // Override primary if user provides one
+  if primary != none {
+    palette.primary = primary
+    palette.primary-light = primary.lighten(40%)
+  }
+
   show: touying-slides.with(
     config-colors(
-      primary: primary,
-      neutral-lightest: neutral-lightest,
-      neutral-darkest: neutral-darkest,
+      primary: palette.primary,
+      primary-light: palette.primary-light,
+      secondary: palette.secondary,
+      neutral-lightest: palette.neutral-lightest,
+      neutral-light: palette.neutral-light,
+      neutral-dark: palette.neutral-dark,
+      neutral-darkest: palette.neutral-darkest,
+      accent: palette.accent,
     ),
     config-store(
       align: align,
@@ -351,6 +425,8 @@
       footer-a: footer-a,
       footer-b: footer-b,
       footer-c: footer-c,
+      background: background,
+      background-opacity: background-opacity,
     ),
     config-common(
       slide-fn: slide,
@@ -376,19 +452,58 @@
       footer: sdu-footer,
       alert: (self: none, it) => text(fill: self.colors.primary, it),
       init: (self: none, body) => {
+        // codly initialization
+        show: codly-init.with()
+        configure-codly(
+          primary: self.colors.primary,
+          neutral-light: self.colors.neutral-light,
+          neutral-lightest: self.colors.neutral-lightest,
+        )
+
+        // theorem environments
+        show: show-sdu-theorems
+
         set text(size: 20pt)
         show heading: set text(fill: self.colors.primary)
         set list(marker: (text([#v(-0.2em)‣], fill: self.colors.primary, size: 1.6em),
                           text([--], fill: self.colors.primary)))
+
+        // Table styling
+        set table(
+          stroke: (x, y) => (
+            left: none,
+            right: none,
+            top: if y == 0 { 1.2pt + self.colors.neutral-darkest } else { none },
+            bottom: if y == 0 { 0.8pt + self.colors.neutral-darkest } else { 0.55pt + self.colors.neutral-dark },
+          ),
+          inset: (x: 10pt, y: 7pt),
+        )
+        show table.cell.where(y: 0): set text(fill: self.colors.neutral-darkest, weight: "bold")
+        show table.cell.where(y: 0): set table.cell(fill: none)
+        show table.cell.where(y: 0): set table.cell(inset: (x: 10pt, y: 8pt))
+
         show figure.caption: set text(size: 0.6em)
         show footnote.entry: set text(size: 0.6em)
-        // 避免全局 list marker 影响参考文献编号样式
-        // 让参考文献编号与第一行对齐
+
+        // Citation style: primary color + bold
+        show cite: it => {
+          text(fill: self.colors.primary, weight: "bold", it)
+        }
+
+        // Reference list styling
         show bibliography: it => {
-          show grid.cell.where(x: 0): it => align(top, it)
+          set text(size: 0.7em)
+          set block(above: 0.5em)
+          show grid.cell.where(x: 0): cell => {
+            box(
+              fill: self.colors.primary,
+              radius: 50%,
+              inset: (x: 5pt, y: 3pt),
+              text(fill: self.colors.neutral-lightest, weight: "bold", size: 0.9em, cell),
+            )
+          }
           it
         }
-        show bibliography: set text(size: 0.6em)
         show link: it => if type(it.dest) == str {
           set text(fill: self.colors.primary)
           it

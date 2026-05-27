@@ -8,8 +8,11 @@ A [Touying](https://github.com/touying-typst/touying)-based [Typst](https://typs
 
 ## 特性
 
-- 内置山东大学校徽与标准红 (`#880000`) 主题色
-- 支持 `full` / `normal` 两种主题样式，页眉页脚可定制
+- 内置山东大学校徽与标准红 (`#880000`) 主题色，支持亮色/暗色模式
+- 支持自定义主色调，自动派生配色方案
+- 数学定理环境（定理、定义、引理、推论、证明、示例）
+- 代码语法高亮（支持行号、行高亮、语言标签）
+- 多栏布局、卡片组件、高亮块
 - 渐进式显示 (`#pause`、`#uncover`、`#only`)、演讲者备注、讲义模式
 - Typst 编译速度显著优于 LaTeX，语法更简洁
 
@@ -27,15 +30,17 @@ typst init @preview/sdu-touying-simpl:1.0.1
 #import "@preview/sdu-touying-simpl:1.0.1": *
 
 #show: sdu-theme.with(
-  title: "演示文稿标题",
-  author: "您的姓名",
-  subtitle: "副标题",
-  institution: "山东大学",
-  date: datetime.today(),
+  config-info(
+    title: [演示文稿标题],
+    author: [您的姓名],
+    subtitle: [副标题],
+    institution: [山东大学],
+    date: datetime.today(),
+  ),
 )
 
 #title-slide()
-#outline-slide("目录")
+#outline-slide([目录])
 
 = 主题一
 == 页面一
@@ -44,12 +49,16 @@ typst init @preview/sdu-touying-simpl:1.0.1
 == 页面二
 ```
 
+完整使用说明参见 [使用文档](docs/usage.md)。
+
 ## 依赖
 
 | 包名 | 版本 | 用途 |
 |------|------|------|
 | [Touying](https://typst.app/universe/package/touying) | 0.7.3 | 演示文稿框架 |
 | [Octique](https://typst.app/universe/package/octique) | 0.1.1 | GitHub Octicons 图标 |
+| [Codly](https://typst.app/universe/package/codly) | 1.3.0 | 代码语法高亮 |
+| [Codly Languages](https://typst.app/universe/package/codly-languages) | 0.1.10 | 语言定义数据 |
 
 ## 字体
 

@@ -1,5 +1,5 @@
-#import "@preview/sdu-touying-simpl:1.0.1" :*
-// #import "../lib.typ" :*
+// #import "@preview/sdu-touying-simpl:1.0.1" :*
+#import "../lib.typ" :*
 // https://typst.app/universe/package/timeliney
 #import "@preview/timeliney:0.4.0"
 
@@ -53,6 +53,7 @@
     logo:sdu-logo
   ),
   footer-line-color: sdu-red,
+  background-opacity: 0.4,
 )
 #set heading(numbering: "1.1")
 #show heading.where(level: 1): set heading(numbering: "1.")
@@ -500,6 +501,36 @@ $ E=m c^2\ chevron.l a, b chevron.r &= arrow(a) dot arrow(b) \
     n! + 2, quad n! + 3, quad ..., quad n! + n #qedhere
   $
 ]
+
+== SDU 定理环境
+
+#sdu-theorem(title: "欧几里得")[
+  素数有无穷多个。
+]
+
+#sdu-definition[
+  一个大于 1 的自然数，若不能被更小的自然数乘积表示，则称为素数。
+]
+
+#sdu-lemma[
+  任意两个素数互素。
+]
+
+#sdu-corollary[
+  素数集合是无限集。
+]
+
+由定理 1 可知推论 1。
+
+#sdu-proof[
+  假设素数有限，设为 $p_1, p_2, dots, p_n$。
+  考虑 $P = p_1 p_2 dots p_n + 1$，则 $P$ 不被任何 $p_i$ 整除，矛盾。 #qedhere
+]
+
+#sdu-example[
+  最小的几个素数为 $2, 3, 5, 7, 11$。
+]
+
 = 小组件
 
 == 时间轴，很简单
@@ -568,6 +599,26 @@ pub fn main() {
 }
 ```
 ]
+
+== SDU 代码高亮
+
+```python
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quicksort(left) + middle + quicksort(right)
+```
+
+#sdu-code(highlight-lines: (3, 4))[```rust
+fn main() {
+    let greeting = "Hello, SDU!";
+    println!("{}", greeting);
+}
+```]
 
 == 用节点和箭头绘制图表
 
@@ -771,6 +822,45 @@ tip(title: "Best tip ever")[Check out this cool package]
 
 #example[An example make things interesting]
 
+
+= 布局组件
+
+== 多栏布局
+
+#sdu-columns(3)[
+  *第一栏* — 文字内容
+][
+  *第二栏* — 更多内容
+][
+  *第三栏* — 继续
+]
+
+== 卡片与高亮
+
+#sdu-card(title: "性能对比")[
+  Typst 增量编译一般在数毫秒内完成。
+]
+
+#sdu-highlight[
+  *结论：* Typst 在编译速度上显著优于 LaTeX。
+]
+
+#sdu-quote(
+  source: [Donald Knuth],
+)[
+  预测未来的最好方法是创造未来。
+]
+
+== 表格样式
+
+#table(
+  columns: 4,
+  [排版系统], [编译速度], [语法难度], [生态成熟度],
+  [LaTeX], [慢], [难], [强],
+  [Typst], [快], [中], [成长中],
+  [Word], [中], [易], [强],
+  [Markdown], [快], [易], [中],
+)
 
 = 页面
 
