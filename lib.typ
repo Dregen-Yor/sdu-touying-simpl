@@ -5,14 +5,8 @@
 #set text(region: "CN")
 
 #let primary = sdu-red
-#let primary-dark = rgb("#880000")
-#let secondary = rgb("#ffffff")
 #let neutral-lightest = rgb("#ffffff")
 #let neutral-darkest = rgb("#000000")
-#let themeblue = rgb("#4285f4")
-#let themegreen = rgb("#34a853")
-#let themeyellow = rgb("#fbbc05")
-#let themered = rgb("#ea4335")
 
 #let tblock(title: none, it) = {
   grid(
@@ -26,7 +20,7 @@
       text(fill: neutral-lightest, weight: "bold", title),
     ),
     rect(
-      fill: gradient.linear(primary-dark, primary.lighten(90%), angle: 90deg),
+      fill: gradient.linear(primary, primary.lighten(90%), angle: 90deg),
       width: 100%,
       height: 4pt,
     ),
@@ -70,7 +64,7 @@
     ]
     
   }
-  self = utils.merge-dicts(
+  self = ty.utils.merge-dicts(
     self,
     config-page(
       header: header + v(-4em),
@@ -83,7 +77,6 @@
 
 #let title-slide(
   config: (:),
-  extra: none,
   ..args,
 ) = touying-slide-wrapper(self => {
   self = ty.utils.merge-dicts(
@@ -157,7 +150,7 @@
         columns: (auto, 1fr, auto, auto),
         
         text(fill: self.colors.neutral-lightest, ty.utils.call-or-display(self, self.store.footer-a)),
-        utils.fit-to-width(grow: false,100%,text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-b))),
+        ty.utils.fit-to-width(grow: false,100%,text(fill: self.colors.neutral-lightest.lighten(40%), ty.utils.call-or-display(self, self.store.footer-b))),
         text(fill: self.colors.neutral-lightest.lighten(10%), ty.utils.call-or-display(self, self.store.footer-c)),
       ),
     ),
@@ -182,8 +175,8 @@
     set text(fill: self.colors.neutral-lightest, weight: "bold", size: 1.2em)
     set std.align(horizon)
     // v(1em)
-    show: components.cell.with(fill: self.colors.primary, inset: 2em)
-    utils.fit-to-width(grow: false,100%,ty.utils.display-current-heading(level: 2, numbered: false))
+    show: ty.components.cell.with(fill: self.colors.primary, inset: 2em)
+    ty.utils.fit-to-width(grow: false,100%,ty.utils.display-current-heading(level: 2, numbered: false))
   }
   self = ty.utils.merge-dicts(
     self,
@@ -219,17 +212,17 @@
     stack(
       dir: ttb,
       spacing: 1em,
-      text(self.colors.neutral-darkest, utils.display-current-heading(level: level, numbered: numbered, style: auto)),
+      text(self.colors.neutral-darkest, ty.utils.display-current-heading(level: level, numbered: numbered, style: auto)),
       block(
         height: 2pt,
         width: 100%,
         spacing: 0pt,
-        components.progress-bar(height: 2pt, self.colors.primary, self.colors.primary-light),
+        ty.components.progress-bar(height: 2pt, self.colors.primary, self.colors.primary-light),
       ),
     )
     text(self.colors.neutral-dark, body)
   }
-  self = utils.merge-dicts(
+  self = ty.utils.merge-dicts(
     self,
     config-page(fill: self.colors.neutral-lightest, header: header),
   )
@@ -253,7 +246,7 @@
 })
 
 #let focus-slide(body) = touying-slide-wrapper(self => {
-  self = utils.merge-dicts(
+  self = ty.utils.merge-dicts(
     self,
     config-common(freeze-slide-counter: true),
     config-page(
@@ -329,8 +322,8 @@
 
 #let sdu-theme(
   aspect-ratio: "16-9",
-  header: self => utils.display-current-heading(
-    setting: utils.fit-to-width.with(grow: false, 100%),
+  header: self => ty.utils.display-current-heading(
+    setting: ty.utils.fit-to-width.with(grow: false, 100%),
     depth: self.slide-level,
   ),
   footer-a: self => self.info.author,
@@ -346,14 +339,8 @@
   show: touying-slides.with(
     config-colors(
       primary: primary,
-      primary-dark: primary-dark,
-      secondary: secondary,
       neutral-lightest: neutral-lightest,
       neutral-darkest: neutral-darkest,
-      themeblue: themeblue,
-      themegreen: themegreen,
-      themeyellow: themeyellow,
-      themered: themered,
     ),
     config-store(
       align: align,
@@ -377,8 +364,8 @@
     ),
     config-methods(
       d-cover: (self: none, body) => {
-        utils.cover-with-rect(
-          fill: utils.update-alpha(
+        ty.utils.cover-with-rect(
+          fill: ty.utils.update-alpha(
             constructor: rgb,
             self.page-args.fill,
             self.d-alpha,

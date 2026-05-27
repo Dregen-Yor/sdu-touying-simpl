@@ -44,6 +44,13 @@ typst init @preview/sdu-touying-simpl:1.0.1
 == 页面二
 ```
 
+## 依赖
+
+| 包名 | 版本 | 用途 |
+|------|------|------|
+| [Touying](https://typst.app/universe/package/touying) | 0.7.3 | 演示文稿框架 |
+| [Octique](https://typst.app/universe/package/octique) | 0.1.1 | GitHub Octicons 图标 |
+
 ## 字体
 
 中文字体需手动配置：
